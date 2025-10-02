@@ -16,6 +16,9 @@ const DEFAULT_SETTINGS: DateMirrorSettings = {
 	dateFormat: "YYYY-MM-DD"
 }
 
+// TODO: Format this 🤮
+// TODO: What happens when I clear the date property? 
+// TODO: What happens ot the date property when the file name has the date removed?
 export default class DateMirror extends Plugin {
 	settings: DateMirrorSettings;
 	timer: { [key: string]: number } = {}
@@ -24,6 +27,7 @@ export default class DateMirror extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
+		// TODO: Look into perf stuff regarding registering events, I think this might be bad
 		this.registerEvent(this.app.metadataCache.on('changed', (file,) => {
 			if (file instanceof TFile) {
 				this.updateFilename(file)
@@ -41,8 +45,6 @@ export default class DateMirror extends Plugin {
 	}
 
 	onunload() {
-		// Clear all debounce timers
-		Object.values(this.debounceTimers).forEach(timer => clearTimeout(timer))
 	}
 
 	async updateFilename(file: TFile) {
@@ -67,12 +69,15 @@ export default class DateMirror extends Plugin {
 			if (newName !== currentName) {
 				const newFileName = extension ? `${newName}.${extension}` : newName
 				const newPath = `${file.parent?.path}/${newFileName}`
+				// TODO: Make this logging verbose
 				console.log('renaming file', file.path, '->', newPath)
 				await this.app.fileManager.renameFile(file, newPath);
 			}
 		}
 	}
 
+	// TODO: I got "invalid date" in the file name one time, make sure that doesn't happen
+	// TODO: Test invalid dates
 	/**
 	 * Attempts to find and replace date patterns in a filename
 	 * Returns the original filename if no date pattern is found
@@ -89,6 +94,7 @@ export default class DateMirror extends Plugin {
 		return filename
 	}
 
+	// TODO: This this more with other formats, this is awkward and might break
 	/**
 	 * Converts a Moment.js date format string to a regex pattern
 	 * that can match dates in that format within filenames
@@ -109,6 +115,7 @@ export default class DateMirror extends Plugin {
 		return new RegExp(pattern)
 	}
 
+	// TODO: Test invalid values
 	async updateFrontmatter(file: TFile) {
 		// Extract date from filename
 		const dateFromFilename = this.extractDateFromFilename(file.basename)
@@ -226,6 +233,8 @@ class SampleSettingTab extends PluginSettingTab {
 				});
 			});
 	
+			// TODO: Make sure default property doesn't break stuff
+			// TODO: Reference Obligator plugin where I found this
 			// Date format setting
 			let date_formatter: MomentFormatComponent;
 			const settingDateFormat = new Setting(containerEl)
