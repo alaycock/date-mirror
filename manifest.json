@@ -2,8 +2,8 @@
 	"id": "date-mirror",
 	"name": "Date Mirror",
 	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Keeps your filenames in sync with a date property",
+	"minAppVersion": "1.4.4",
+	"description": "Keeps a date in your note filenames in sync with a date property.",
 	"author": "Adam Laycock",
 	"authorUrl": "https://github.com/alaycock",
 	"isDesktopOnly": false
